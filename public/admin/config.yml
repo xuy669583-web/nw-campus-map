@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: xuy669583-web/nw-campus-map
   branch: main
+  base_url: https://nw-campus-map.pages.dev
 
 # 使用 decap-server 本地开发
 # local_backend: true
@@ -8,7 +10,7 @@ backend:
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-site_url: https://your-domain.pages.dev
+site_url: https://nw-campus-map.pages.dev
 logo_url: /badge.png
 
 collections:
