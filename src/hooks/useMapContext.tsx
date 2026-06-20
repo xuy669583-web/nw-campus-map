@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import type { POI, AppState, ActiveMode, MapLayer } from '../types';
 import { campusPOIs } from '../data/pois';
 
 const initialState: AppState = {
   map: null,
-  pois: campusPOIs,
-  filteredPOIs: campusPOIs,
+  pois: [],
+  filteredPOIs: [],
   selectedPOI: null,
   activeCategories: [],
   categoryFilterActive: false,
@@ -57,6 +57,35 @@ const MapContext = createContext<MapContextType | null>(null);
 export function MapProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>(initialState);
   const mapRef = useRef<any>(null);
+
+  // Load POI data from JSON at runtime
+  useEffect(() => {
+    fetch('/data/pois.json')
+      .then(res => res.json())
+      .then((pois: POI[]) => {
+        if (pois && pois.length > 0) {
+          setState(prev => ({
+            ...prev,
+            pois,
+            filteredPOIs: pois,
+          }));
+        } else {
+          // Fallback to hardcoded data
+          setState(prev => ({
+            ...prev,
+            pois: campusPOIs,
+            filteredPOIs: campusPOIs,
+          }));
+        }
+      })
+      .catch(() => {
+        setState(prev => ({
+          ...prev,
+          pois: campusPOIs,
+          filteredPOIs: campusPOIs,
+        }));
+      });
+  }, []);
 
   const setMap = useCallback((map: any) => {
     mapRef.current = map;

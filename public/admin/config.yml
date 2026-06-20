@@ -4,9 +4,6 @@ backend:
   branch: main
   base_url: https://nw-campus-map.pages.dev
 
-# 使用 decap-server 本地开发
-# local_backend: true
-
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
@@ -14,56 +11,26 @@ site_url: https://nw-campus-map.pages.dev
 logo_url: /badge.png
 
 collections:
-  # 1. POI 兴趣点管理
   - name: "pois"
     label: "POI兴趣点"
     folder: "content/pois"
     create: true
-    slug: "{{id}}_{{name}}"
+    slug: "{{name}}"
     fields:
-      - {label: "ID", name: "id", widget: "number", required: true}
       - {label: "名称", name: "name", widget: "string", required: true}
-      - {label: "分类", name: "category", widget: "select", options: ["教学科研", "生活服务", "文体设施", "校园景观", "校门交通", "历史建筑", "学生公寓", "餐饮商业"], required: true}
-      - {label: "简介", name: "description", widget: "text"}
-      - {label: "详细描述", name: "detail", widget: "markdown"}
-      - {label: "地址", name: "address", widget: "string"}
-      - {label: "经度", name: "lng", widget: "number", value_type: "float"}
-      - {label: "纬度", name: "lat", widget: "number", value_type: "float"}
-      - label: "照片"
-        name: "photos"
+      - {label: "分类", name: "type", widget: "select", options: ["校门", "教学楼", "办公楼", "食堂", "宿舍", "景观", "文化场馆", "体育场馆", "院系", "服务设施", "医院", "图书馆"], required: true}
+      - {label: "子分类", name: "subtype", widget: "string", required: false}
+      - {label: "简介", name: "info", widget: "string", required: false}
+      - {label: "详细描述", name: "description", widget: "markdown", required: false}
+      - {label: "经度", name: "lng", widget: "number", value_type: "float", required: true}
+      - {label: "纬度", name: "lat", widget: "number", value_type: "float", required: true}
+      - label: "历史照片"
+        name: "pastImages"
         widget: "list"
-        fields:
-          - {label: "图片", name: "url", widget: "image"}
-          - {label: "年份标签", name: "label", widget: "string", required: false}
-      - {label: "标签", name: "tags", widget: "list", field: {label: "标签", name: "tag", widget: "string"}}
+        field: {label: "图片路径", name: "url", widget: "string"}
+      - label: "现状照片"
+        name: "currentImages"
+        widget: "list"
+        field: {label: "图片路径", name: "url", widget: "string"}
       - {label: "排序权重", name: "sort", widget: "number", default: 0}
       - {label: "是否显示", name: "visible", widget: "boolean", default: true}
-
-  # 2. 校园风光相册管理
-  - name: "gallery"
-    label: "校园风光相册"
-    folder: "content/gallery"
-    create: true
-    slug: "{{year}}_{{title}}"
-    fields:
-      - {label: "年份", name: "year", widget: "string", required: true}
-      - {label: "标题", name: "title", widget: "string", required: true}
-      - label: "图片列表"
-        name: "images"
-        widget: "list"
-        fields:
-          - {label: "图片", name: "url", widget: "image"}
-          - {label: "描述", name: "description", widget: "string"}
-      - {label: "排序", name: "order", widget: "number", default: 0}
-
-  # 3. 公告通知
-  - name: "announcements"
-    label: "公告通知"
-    folder: "content/announcements"
-    create: true
-    slug: "{{date}}_{{title}}"
-    fields:
-      - {label: "标题", name: "title", widget: "string", required: true}
-      - {label: "发布日期", name: "date", widget: "datetime"}
-      - {label: "内容", name: "body", widget: "markdown"}
-      - {label: "置顶", name: "pinned", widget: "boolean", default: false}
